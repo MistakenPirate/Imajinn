@@ -2,16 +2,37 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CircularComponent from '../../components/CircularComponent';
 import DesignOptionsComponent from '../../components/DesignOptionsComponent';
-import { UserContext} from '../../providers/UserContextProvider';
-import {Cloudinary} from "@cloudinary/url-gen";
+import { UserContext } from '../../providers/UserContextProvider';
+import { Cloudinary } from "@cloudinary/url-gen";
 
 
 function CreateProfilePage() {
     const [step, setStep] = useState(1);
 
-    const {userInfo} = useContext(UserContext)
+    const { userInfo } = useContext(UserContext)
 
-    const cld = new Cloudinary({cloud: {cloudName: 'dlywhxskx'}});
+
+    // const uploadProfilePicture = async () => {
+    //     if (!selectedImage) {
+    //         return; // Handle no image selected case
+    //     }
+
+    //     const cld = new Cloudinary({ cloud: { cloudName: 'dlywhxskx' } })
+
+    //     try {
+    //         const uploadResponse = await cld.uploader.upload(selectedImage, {
+    //             // Upload options (e.g., transformations, public ID)
+    //         });
+
+    //         const imageUrl = uploadResponse.secure_url;
+
+    //         // Send the imageUrl to your Node.js backend for storage (explained later)
+    //     } catch (error) {
+    //         console.error('Upload failed:', error);
+    //         // Handle upload errors gracefully
+    //     }
+    };
+
 
     const handleNext = () => {
         setStep(2);
@@ -27,11 +48,11 @@ function CreateProfilePage() {
                 <div className="ml-[10%] mt-[10%] h-[10%] flex">
                     <img src="12.png" alt="" className="w-full h-full object-contain" />
                 </div>
-                    {step === 2 && (
-                        <button className="md:first-line :flex items-center bg-slate-100 justify-center hidden lg:block md:w-12 mt-[20%] lg:w-8 rounded-md px-4 my-5" onClick={handleBack}>
-                                {"<"}
-                        </button>
-                    )}
+                {step === 2 && (
+                    <button className="md:first-line :flex items-center bg-slate-100 justify-center hidden lg:block md:w-12 mt-[20%] lg:w-8 rounded-md px-4 my-5" onClick={handleBack}>
+                        {"<"}
+                    </button>
+                )}
                 <div className="bg-white"></div>
             </div>
             <div className="mx-7 pt-5 w-full md:absolute flex flex-col md:mt-[8%] items-center">
@@ -71,8 +92,8 @@ function CreateProfilePage() {
                 ) : (
                     <div className="flex flex-col md:items-center ">
                         <button className="md:first-line md:absolute lg:hidden :flex items-center bg-slate-100 justify-center md:w-12 mx-[25%] md:ml-0 md:mr-[90%] lg:w-8 rounded-md  my-5"
-                        onClick={handleBack}>
-                                {"<"}
+                            onClick={handleBack}>
+                            {"<"}
                         </button>
                         <div className="text-3xl font-bold">What bring's you to Imajinn?</div>
                         <div className="mt-3 font-light">
