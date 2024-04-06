@@ -1,4 +1,5 @@
 const JWT_SECRET = "qwertymnbvcasdfglkjhg";
+const jwt = require('jsonwebtoken')
 
 exports.fn = (req, res, next)=>{
   const authHeader = req.headers["authorization"];

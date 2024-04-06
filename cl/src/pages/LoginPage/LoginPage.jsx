@@ -1,7 +1,9 @@
 import React , {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 
 function LoginPage() {
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -11,9 +13,34 @@ function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+    
+    try{
+      const response = await fetch('http://localhost:3000/login',{
+        method:'POST',
+        headers: {
+          'content-type' : 'application/json'
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if(response.ok){
+        alert("Logged in Successfully")
+        navigate('/createprofile')
+      }else{
+        alert("Login Failed")
+      }
+    }
+    catch(error){
+      console.error("Error during login",error)
+      if(error.message==='Failed to fetch'){
+        alert("Failed to connect to the server. Please check your internet connectivity")
+      }
+      else{
+        alert("Login Failed")
+      }
+    }
   };
 
   return (
@@ -24,7 +51,6 @@ function LoginPage() {
         </div>
         <div className="hidden md:block">
           <div className='flex flex-col pl-20 text-bold text-3xl text-rose-950'>
-            {/* Our logo is an Image of a Jinn */}
             <div>
               A Creative life is an Amplified life.
             </div>
