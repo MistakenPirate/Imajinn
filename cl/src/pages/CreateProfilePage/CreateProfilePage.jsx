@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CircularComponent from '../../components/CircularComponent';
 import DesignOptionsComponent from '../../components/DesignOptionsComponent';
+import { UserContext} from '../../providers/UserContextProvider';
+import {Cloudinary} from "@cloudinary/url-gen";
+
 
 function CreateProfilePage() {
     const [step, setStep] = useState(1);
+
+    const {userInfo} = useContext(UserContext)
+
+    const cld = new Cloudinary({cloud: {cloudName: 'dlywhxskx'}});
 
     const handleNext = () => {
         setStep(2);

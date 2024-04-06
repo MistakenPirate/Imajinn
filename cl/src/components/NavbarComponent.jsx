@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { IoSearchSharp } from "react-icons/io5";
 import { TbShoppingCartCheck } from "react-icons/tb";
 import { FiMenu } from "react-icons/fi";
+import { UserContext } from '../providers/UserContextProvider';
+import { Link } from 'react-router-dom';
 
 const NavbarComponent = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
+  const { userInfo } = useContext(UserContext);
+  const isLoggedIn = localStorage.getItem('token'); // Check if user is logged in
+
+  console.log(userInfo)
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,11 +29,17 @@ const NavbarComponent = () => {
     setShowMenu(!showMenu);
   };
 
+  const handleLogout = () => {
+    // Handle logout logic here
+    localStorage.removeItem('token');
+    // console.log('Logout clicked');
+  };
+
   return (
     <div className="flex justify-between items-center border-b-2">
       <div className="flex items-center space-x-5">
         <div>
-          <img src="12.png" alt="" className="w-32 ml-3 mr-0 my-3" />
+          <img src="12.png" alt="" className="w-32 ml-3 mr-0 my-3" onClick={toggleMenu} />
         </div>
         {!isMobile && (
           <>
@@ -45,7 +58,27 @@ const NavbarComponent = () => {
           </button>
         )}
         <TbShoppingCartCheck />
-        <img src="1.png" className="w-10 rounded-full bg-slate-200 border h-10" alt="" />
+        <div className='flex flex-row relative'>
+          <img src={userInfo.imageURL} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} />
+          {showMenu && (
+            <div className="absolute top-full mt-1 ml-3 bg-white shadow-md rounded-md p-2">
+              <div className="flex items-center space-x-2 ">
+                <img src={userInfo.imageURL} alt="Profile" className="w-8 h-8 rounded-full" />
+              </div>
+                <span className="text-gray-700">{userInfo.name}</span>
+              {isLoggedIn ? ( // Check if user is logged in
+                <button className="block text-sm text-gray-600 mt-2" onClick={handleLogout}>Logout</button>
+              ) : (
+                <Link to='/login'>
+                <button className="block text-sm text-gray-600 mt-2">
+                  Login
+                  </button>
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+
         <button
           type="submit"
           className="bg-pink-500 hover:bg-pink-700 text-white font-bold px-2 py-2 rounded focus:outline-none focus:shadow-outline"

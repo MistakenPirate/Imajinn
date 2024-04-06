@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profileURL:{
+        type:String
+    },
     interests: {
         type: [String],
         default: []
