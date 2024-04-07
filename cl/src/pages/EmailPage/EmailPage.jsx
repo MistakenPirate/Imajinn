@@ -1,10 +1,12 @@
 import NavbarComponent from '../../components/NavbarComponent'
 import FooterComponent from '../../components/FooterComponent'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { UserContext } from '../../providers/UserContextProvider'
 
 function EmailPage() {
   const {userInfo} = useContext(UserContext)
+  console.log(userInfo)
+
 
   return (
     <div>

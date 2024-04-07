@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CircularComponent from '../../components/CircularComponent';
 import DesignOptionsComponent from '../../components/DesignOptionsComponent';
 import { UserContext } from '../../providers/UserContextProvider';
@@ -9,29 +9,31 @@ import { Cloudinary } from "@cloudinary/url-gen";
 function CreateProfilePage() {
     const [step, setStep] = useState(1);
 
-    const { userInfo } = useContext(UserContext)
+    const {userInfo} = useContext(UserContext)
+    console.log(userInfo)
 
+    const navigate = useNavigate()
 
-    // const uploadProfilePicture = async () => {
-    //     if (!selectedImage) {
-    //         return; // Handle no image selected case
-    //     }
+    const [image,setImage] = useState('')
 
-    //     const cld = new Cloudinary({ cloud: { cloudName: 'dlywhxskx' } })
+    const [formData,setFormData]=useState({
+        location:"",
+        interest:[],
+    })
 
-    //     try {
-    //         const uploadResponse = await cld.uploader.upload(selectedImage, {
-    //             // Upload options (e.g., transformations, public ID)
-    //         });
+    const handleImage = (e)=>{
+        const file = e.target.files[0]
+        setFileToBase(file)
+        console.log(file)
+    }
 
-    //         const imageUrl = uploadResponse.secure_url;
-
-    //         // Send the imageUrl to your Node.js backend for storage (explained later)
-    //     } catch (error) {
-    //         console.error('Upload failed:', error);
-    //         // Handle upload errors gracefully
-    //     }
-    };
+    const setFileToBase = (file)=>{
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = ()=>{
+            setImage(reader.result)
+        }
+    }
 
 
     const handleNext = () => {
@@ -40,6 +42,35 @@ function CreateProfilePage() {
 
     const handleBack = () => {
         setStep(1);
+    };
+
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        try {
+            const response = await fetch('location and imageurl api endpoint',{
+                method: 'POST',
+                headers:{
+                    'content-type':'application/json',
+                },
+                body:JSON.stringify(formData)
+            })
+
+            if(response.ok){
+                alert("Successfully update Profile Data");
+                navigate('/emailverify')
+                window.location.reload()
+            }
+            
+        } catch (error) {
+            console.error("Error during Updation",error)
+            if(error.message==="Failed to fetch"){
+                alert("Failed to connect to the server. Please check your internet connectivity")
+            }
+            else{
+                alert("Profile Updation failed")
+            }
+        }
+
     };
 
     return (
@@ -107,6 +138,7 @@ function CreateProfilePage() {
                             <button
                                 type="submit"
                                 className="bg-pink-500 mt-10 mb-10 hover:bg-pink-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
+                                onClick={handleSubmit}
                             >
                                 FINISH
                             </button>

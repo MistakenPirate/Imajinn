@@ -3,16 +3,17 @@ import { IoSearchSharp } from "react-icons/io5";
 import { TbShoppingCartCheck } from "react-icons/tb";
 import { FiMenu } from "react-icons/fi";
 import { UserContext } from '../providers/UserContextProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const NavbarComponent = () => {
+  const navigate = useNavigate()
   const [isMobile, setIsMobile] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  const { userInfo } = useContext(UserContext);
-  const isLoggedIn = localStorage.getItem('token'); // Check if user is logged in
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const isLoggedIn = localStorage.getItem('token')// Check if user is logged in
 
-  console.log(userInfo)
+  // console.log(userInfo)
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,11 +30,16 @@ const NavbarComponent = () => {
     setShowMenu(!showMenu);
   };
 
+
   const handleLogout = () => {
     // Handle logout logic here
+    setUserInfo({})
     localStorage.removeItem('token');
+    alert("Logged out Successfully")
+    navigate('/')
+    window.location.reload(); 
     // console.log('Logout clicked');
-  };
+  }
 
   return (
     <div className="flex justify-between items-center border-b-2">
@@ -65,13 +71,13 @@ const NavbarComponent = () => {
               <div className="flex items-center space-x-2 ">
                 <img src={userInfo.imageURL} alt="Profile" className="w-8 h-8 rounded-full" />
               </div>
-                <span className="text-gray-700">{userInfo.name}</span>
+              <span className="text-gray-700">{userInfo.name}</span>
               {isLoggedIn ? ( // Check if user is logged in
                 <button className="block text-sm text-gray-600 mt-2" onClick={handleLogout}>Logout</button>
               ) : (
                 <Link to='/login'>
-                <button className="block text-sm text-gray-600 mt-2">
-                  Login
+                  <button className="block text-sm text-gray-600 mt-2">
+                    Login
                   </button>
                 </Link>
               )}

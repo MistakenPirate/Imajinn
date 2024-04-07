@@ -1,4 +1,4 @@
-const JWT_SECRET = "qwertymnbvcasdfglkjhg";
+const JWT_SECRET = process.env.JWT_SECRET
 const jwt = require('jsonwebtoken')
 
 exports.fn = (req, res, next)=>{

@@ -1,21 +1,29 @@
 const User = require('../model/user')
-const JWT_SECRET = "qwertymnbvcasdfglkjhg";
+const JWT_SECRET = process.env.JWT_SECRET
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 exports.getUser = async (req, res) => {
-    try {
-      const user = await User.findOne({ username: req.user.username });
+  try {
+      // Extract user information from the JWT token
+      const token = req.headers.authorization.split(" ")[1];
+      // res.send(token)
+      const decodedToken = jwt.verify(token, JWT_SECRET);
+      const username = decodedToken.username;
+
+      // Find the user using the decoded username
+      const user = await User.findOne({ username });
+
       if (user) {
-        res.json(user);
+          res.json(user);
       } else {
-        res.status(404).send("User not found");
+          res.status(404).send("User not found");
       }
-    } catch (error) {
-      console.error('Error fetching user profile',error.message)
-      res.status(500).send('Internal Server Error')
-    }
+  } catch (error) {
+      console.error('Error fetching user profile', error.message);
+      res.status(500).send('Internal Server Error');
   }
+}
 
 exports.registerUser = async (req, res) => {
     const { name, username, email, password } = req.body;
@@ -30,7 +38,8 @@ exports.registerUser = async (req, res) => {
           password: hashedPassword,
         });
         await newUser.save();
-        res.status(201).send("User registered successfully");
+        const token = jwt.sign({ username: newUser.username }, JWT_SECRET);
+        res.status(201).send({token,message:"User Registered Successfully"});
     }
     else{
       res.status(400).send("User Already Exists")

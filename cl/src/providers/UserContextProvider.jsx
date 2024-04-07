@@ -7,25 +7,26 @@ export const UserContextProvider = ({children}) => {
     const [userInfo, setUserInfo] = useState({})
     const [error, setError] = useState(null);
     const [loading,setLoading] = useState(null)
+    // console.log(userInfo)
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             setLoading(true);
             setError(null);
-
+    
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
                     throw new Error('No token found');
                 }
-
+    
                 const response = await fetch('http://localhost:3000/profile', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+    
                 if (response.ok) {
                     const userData = await response.json();
                     setUserInfo(userData);
@@ -38,9 +39,10 @@ export const UserContextProvider = ({children}) => {
                 setLoading(false);
             }
         };
-
+    
         fetchUserProfile();
     }, [userInfo]);
+    
 
 
 

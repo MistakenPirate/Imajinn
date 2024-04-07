@@ -1,7 +1,9 @@
 import {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 function SignUpForm() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name:"",
     username: "",
@@ -9,6 +11,8 @@ function SignUpForm() {
     password: "",
 
   });
+
+
   const [isTermsChecked,setIsTermsChecked] = useState(false)
 
   const handleChange = (e) => {
@@ -41,7 +45,11 @@ function SignUpForm() {
       // console.log(response)
     
       if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
         alert("Registered Successfully");
+        navigate('/createprofile')
+        window.location.reload()
       } else {
         // console.log(response)
         alert("Registration Failed");

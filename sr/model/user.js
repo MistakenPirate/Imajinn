@@ -19,12 +19,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    profileURL:{
-        type:String
+    image:{
+        public_id:{
+            type: String
+        },
+        url:{
+            type: String
+        }
     },
-    interests: {
-        type: [String],
-        default: []
+    location:{
+        type:String
     }
 });
 

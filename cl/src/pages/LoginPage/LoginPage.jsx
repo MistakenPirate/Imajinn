@@ -27,9 +27,14 @@ function LoginPage() {
       });
 
       if(response.ok){
+        const data = await response.json()
+        localStorage.setItem('token',data.token)
         alert("Logged in Successfully")
-        navigate('/createprofile')
-      }else{
+        navigate('/')
+        window.location.reload(); 
+      }
+      else
+      {
         alert("Login Failed")
       }
     }
