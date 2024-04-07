@@ -1,20 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Cloudinary } from "@cloudinary/url-gen";
+import { UserContext } from '../providers/UserContextProvider';
+// import cloudName from ''
+
 
 const CircularComponent = () => {
     const [selectedImage, setSelectedImage] = useState(null);
+    // const navigate = useNavigate()
+    const { userInfo } = useContext(UserContext)
 
-    const handleImageUpload = (event) => {
+    const handleImageUpload = async (event) => {
         const file = event.target.files[0];
-        const reader = new FileReader();
+        const username = userInfo.username; // Assuming userInfo is accessible through context
 
-        reader.onload = () => {
-            setSelectedImage(reader.result);
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
+        if (!file) {
+            console.error('No file selected');
+            return;
         }
+
+        // Initialize Cloudinary instance
+        const cld = new Cloudinary({
+            cloud: {
+                cloudName: "dlywhxskx"
+            }
+        });
+
+        try {
+            // const uploadResponse = await cld.upload(file, { /* transformation options */ });
+            const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cld}/upload`, {
+                method: 'POST',
+                body: file
+            }
+            )
+
+            // Extract the public_id from the upload response
+            const public_Id = uploadResponse.public_id;
+
+            // Send the public ID to your backend
+            const backendResponse = await fetch('/uploadform', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ public_Id, username }),
+            });
+
+            if (backendResponse.ok) {
+                console.log('Profile picture uploaded successfully');
+                // Handle successful upload (e.g., navigate, reload)
+            } else {
+                console.error('Failed to upload profile picture');
+            }
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+        }
+
+        // Update selected image for preview
+        const reader = new FileReader();
+        reader.onload = () => setSelectedImage(reader.result);
+        reader.readAsDataURL(file);
     };
+
 
     const resetImage = () => {
         setSelectedImage(null);

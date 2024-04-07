@@ -1,77 +1,55 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CircularComponent from '../../components/CircularComponent';
 import DesignOptionsComponent from '../../components/DesignOptionsComponent';
 import { UserContext } from '../../providers/UserContextProvider';
 import { Cloudinary } from "@cloudinary/url-gen";
 
-
 function CreateProfilePage() {
-    const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1);
+  const { userInfo } = useContext(UserContext)
+  const navigate = useNavigate()
 
-    const {userInfo} = useContext(UserContext)
-    console.log(userInfo)
 
-    const navigate = useNavigate()
+  const handleNext = () => {
+    setStep(2);
+  };
 
-    const [image,setImage] = useState('')
+  const handleBack = () => {
+    setStep(1);
+  };
 
-    const [formData,setFormData]=useState({
-        location:"",
-        interest:[],
-    })
+//   const fileInputRef = useRef(null);
+  const [publicId, setPublicId] = useState('');
 
-    const handleImage = (e)=>{
-        const file = e.target.files[0]
-        setFileToBase(file)
-        console.log(file)
-    }
+  const handleButton = async () => {
+    try {
+        const response = await fetch("http://localhost:3000/resend",{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({email : userInfo.email}),
+        })
 
-    const setFileToBase = (file)=>{
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onloadend = ()=>{
-            setImage(reader.result)
+        if(response.ok){
+            // console.log(response)
+            // console.log()
+            // alert("Email sent")
+            navigate('/emailverify')
+            window.location.reload()
         }
-    }
-
-
-    const handleNext = () => {
-        setStep(2);
-    };
-
-    const handleBack = () => {
-        setStep(1);
-    };
-
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        try {
-            const response = await fetch('location and imageurl api endpoint',{
-                method: 'POST',
-                headers:{
-                    'content-type':'application/json',
-                },
-                body:JSON.stringify(formData)
-            })
-
-            if(response.ok){
-                alert("Successfully update Profile Data");
-                navigate('/emailverify')
-                window.location.reload()
-            }
-            
-        } catch (error) {
-            console.error("Error during Updation",error)
-            if(error.message==="Failed to fetch"){
-                alert("Failed to connect to the server. Please check your internet connectivity")
-            }
-            else{
-                alert("Profile Updation failed")
-            }
+        else{
+            alert("email failed due to response")
+            console.error("Response failed")
         }
-
-    };
+        
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+    
+    
 
     return (
         <div className="flex flex-col md:flex-row w-full min-h-screen relative overflow-x-hidden">
@@ -94,7 +72,7 @@ function CreateProfilePage() {
                         <div className="mt-2 font-light">Let others get to know you better! You can do these later</div>
                         <div className="text-l mt-8 font-bold">Add an Avatar</div>
                         <div className="mt-5 mb-0">
-                            <CircularComponent />
+                            <CircularComponent/>
                         </div>
                         <div className="text-l mt-8 font-bold">Add your location</div>
                         <div>
@@ -138,7 +116,7 @@ function CreateProfilePage() {
                             <button
                                 type="submit"
                                 className="bg-pink-500 mt-10 mb-10 hover:bg-pink-700 text-white font-bold py-2 px-20 rounded focus:outline-none focus:shadow-outline"
-                                onClick={handleSubmit}
+                                onClick={handleButton}
                             >
                                 FINISH
                             </button>

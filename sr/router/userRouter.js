@@ -9,4 +9,8 @@ router.post('/register',userController.registerUser)
 
 router.post('/login',userController.loginUser)
 
+router.post('/uploadform',userController.uploadForm)
+
+router.post('/resend',userController.resend)
+
 module.exports = router

@@ -7,6 +7,11 @@ const userRoutes = require("./router/userRouter")
 
 const app = express();
 
+// const corsOptions = {
+//   origin: 'http://localhost:5173', // Update this with your frontend URL
+//   optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+
 app.use(express.json());
 app.use(cors());
 
