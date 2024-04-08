@@ -4,6 +4,9 @@ import { TbShoppingCartCheck } from "react-icons/tb";
 import { FiMenu } from "react-icons/fi";
 import { UserContext } from '../providers/UserContextProvider';
 import { Link, useNavigate } from 'react-router-dom';
+import {AdvancedImage} from '@cloudinary/react';
+import {Cloudinary} from "@cloudinary/url-gen";
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 
 const NavbarComponent = () => {
   const navigate = useNavigate()
@@ -37,15 +40,28 @@ const NavbarComponent = () => {
     localStorage.removeItem('token');
     alert("Logged out Successfully")
     navigate('/')
-    window.location.reload(); 
+    window.location.reload();
     // console.log('Logout clicked');
   }
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: "dlywhxskx"
+    }
+  });
+
+  const img = cld.image(`${userInfo.username}`)
+  img.resize(thumbnail().width(50).height(50))
+  // const img = cld.image(`${userInfo.username}`)
 
   return (
     <div className="flex justify-between items-center border-b-2">
       <div className="flex items-center space-x-5">
         <div>
-          <img src="12.png" alt="" className="w-32 ml-3 mr-0 my-3" onClick={toggleMenu} />
+          <Link to='/'>
+          <img src="12.png" alt="" className="w-32 ml-3 mr-0 my-3"/>
+          </Link>
+          
         </div>
         {!isMobile && (
           <>
@@ -65,11 +81,13 @@ const NavbarComponent = () => {
         )}
         <TbShoppingCartCheck />
         <div className='flex flex-row relative'>
-          <img src={userInfo.imageURL} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} />
+          {/* <img src={userInfo.imageURL} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} /> */}
+          <AdvancedImage cldImg={img} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} />
           {showMenu && (
             <div className="absolute top-full mt-1 ml-3 bg-white shadow-md rounded-md p-2">
               <div className="flex items-center space-x-2 ">
-                <img src={userInfo.imageURL} alt="Profile" className="w-8 h-8 rounded-full" />
+                {/* <img src={img} alt="Profile" className="w-8 h-8 rounded-full" /> */}
+                <AdvancedImage cldImg={img} className="w-8 h-8 rounded-full"></AdvancedImage>
               </div>
               <span className="text-gray-700">{userInfo.name}</span>
               {isLoggedIn ? ( // Check if user is logged in

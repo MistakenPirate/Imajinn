@@ -108,24 +108,28 @@ exports.resend = async (req, res) => {
   const resendy = new resend.Resend(process.env.RESEND_KEY)
   const {email} = req.body
   try{
+    // console.log(email)
     const data = await resendy.emails.send({
       from: "onboarding@resend.dev",
       to: email,
       subject:"Successfully registered at Imajinn",
-      html: "<div> You have successfully registered at Imajinn. Keep pushing the boundaries of your imagination with us</div>"
+      html: "You have successfully registered at Imajinn. Keep pushing the boundaries of your imagination with us"
     })
 
     if(data.statusCode){
       const {message} = {...data};
-      throw new Error(message)
+      // throw new Error(message)
     }
 
     res.status(200).json({
       status:"success",
+      // console.log('success')
       data:{
         emailRed:data
       },
     })
+
+    // console.log('success')
   } catch(err){
     res.status(404).json({
       status:"failed",

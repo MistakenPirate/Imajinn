@@ -31,6 +31,7 @@ function CreateProfilePage() {
             },
             body: JSON.stringify({email : userInfo.email}),
         })
+        // console.log(response)
 
         if(response.ok){
             // console.log(response)

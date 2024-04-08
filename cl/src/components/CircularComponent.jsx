@@ -11,7 +11,6 @@ const CircularComponent = () => {
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
-        const username = userInfo.username; // Assuming userInfo is accessible through context
 
         if (!file) {
             console.error('No file selected');
@@ -25,32 +24,39 @@ const CircularComponent = () => {
             }
         });
 
-        try {
+        try{
+
+            const uploadResponse = await cld.upload(file,
+                { public_id: `${userInfo.username}` },
+                function (error, result) { console.log(result); });
+
+            console.log(uploadResponse)
+
             // const uploadResponse = await cld.upload(file, { /* transformation options */ });
-            const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cld}/upload`, {
-                method: 'POST',
-                body: file
-            }
-            )
+            // const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cld}/upload`, {
+            //     method: 'POST',
+            //     body: file
+            // }
+            // )
 
             // Extract the public_id from the upload response
-            const public_Id = uploadResponse.public_id;
+        //     const public_Id = uploadResponse.public_id;
 
-            // Send the public ID to your backend
-            const backendResponse = await fetch('/uploadform', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ public_Id, username }),
-            });
+        //     // Send the public ID to your backend
+        //     const backendResponse = await fetch('/uploadform', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({ public_Id, username }),
+        //     });
 
-            if (backendResponse.ok) {
-                console.log('Profile picture uploaded successfully');
-                // Handle successful upload (e.g., navigate, reload)
-            } else {
-                console.error('Failed to upload profile picture');
-            }
+        //     if (backendResponse.ok) {
+        //         console.log('Profile picture uploaded successfully');
+        //         // Handle successful upload (e.g., navigate, reload)
+        //     } else {
+        //         console.error('Failed to upload profile picture');
+        //     }
         } catch (error) {
             console.error('Error uploading profile picture:', error);
         }

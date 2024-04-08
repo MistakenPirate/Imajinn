@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 // const User = require("./model/user");
 const userRoutes = require("./router/userRouter")
+const password = process.env.DB_PASS
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(cors());
 mongoose.connect("mongodb://localhost:27017/imajinn").then(() => {
   console.log("Database connected");
 });
+// mongoose.connect(`mongodb+srv://mistakenpirate38:${password}@imajinn.e2ej7gn.mongodb.net/`).then(() => {
+//   console.log("Database connected");
+// });
 
 app.use('/',userRoutes)
 
