@@ -12,6 +12,7 @@ const NavbarComponent = () => {
   const navigate = useNavigate()
   const [isMobile, setIsMobile] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showLoginMenu, setShowLoginMenu] = useState(false);
 
   const { userInfo, setUserInfo } = useContext(UserContext);
   const isLoggedIn = localStorage.getItem('token')// Check if user is logged in
@@ -31,6 +32,9 @@ const NavbarComponent = () => {
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+  const toggleLoginMenu = () => {
+    setShowLoginMenu(!showLoginMenu);
   };
 
 
@@ -82,8 +86,8 @@ const NavbarComponent = () => {
         <TbShoppingCartCheck />
         <div className='flex flex-row relative'>
           {/* <img src={userInfo.imageURL} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} /> */}
-          <AdvancedImage cldImg={img} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleMenu} />
-          {showMenu && (
+          <AdvancedImage cldImg={img} className="w-10 rounded-full bg-slate-200 hover:cursor-pointer border h-10" alt="" onClick={toggleLoginMenu} />
+          {showLoginMenu && (
             <div className="absolute top-full mt-1 ml-3 bg-white shadow-md rounded-md p-2">
               <div className="flex items-center space-x-2 ">
                 {/* <img src={img} alt="Profile" className="w-8 h-8 rounded-full" /> */}
