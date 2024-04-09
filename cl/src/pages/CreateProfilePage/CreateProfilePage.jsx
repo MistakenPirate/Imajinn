@@ -24,7 +24,7 @@ function CreateProfilePage() {
 
   const handleButton = async () => {
     try {
-        const response = await fetch("http://localhost:3000/resend",{
+        const response = await fetch("https://imajinn.onrender.com/resend",{
             method:"POST",
             headers: {
                 'Content-Type': 'application/json',

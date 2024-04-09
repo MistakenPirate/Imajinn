@@ -20,7 +20,7 @@ export const UserContextProvider = ({children}) => {
                     throw new Error('No token found');
                 }
     
-                const response = await fetch('http://localhost:3000/profile', {
+                const response = await fetch('https://imajinn.onrender.com/profile', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,
