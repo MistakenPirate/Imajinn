@@ -7,13 +7,13 @@ const URL = process.env.MONGO_URL
 
 const app = express();
 
-// const corsOptions = {
-//   origin: 'http://localhost:5173', // Update this with your frontend URL
-// };
+const corsOptions = {
+  origin: 'https://incomparable-arithmetic-46dff4.netlify.app/', // Update this with your frontend URL
+};
 
 app.use(express.json());
 app.use(cors(
-  // corsOptions
+  corsOptions
 ));
 
 
