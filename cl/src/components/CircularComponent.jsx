@@ -18,19 +18,19 @@ const CircularComponent = () => {
         }
 
         // Initialize Cloudinary instance
-        const cld = new Cloudinary({
-            cloud: {
-                cloudName: "dlywhxskx"
-            }
-        });
+        // const cld = new Cloudinary({
+        //     cloud: {
+        //         cloudName: "dlywhxskx"
+        //     }
+        // });
 
-        try{
+        // try{
 
-            const uploadResponse = await cld.upload(file,
-                { public_id: `${userInfo.username}` },
-                function (error, result) { console.log(result); });
+        //     const uploadResponse = await cld.upload(file,
+        //         { public_id: `${userInfo.username}` },
+        //         function (error, result) { console.log(result); });
 
-            console.log(uploadResponse)
+        //     console.log(uploadResponse)
 
             // const uploadResponse = await cld.upload(file, { /* transformation options */ });
             // const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cld}/upload`, {
@@ -57,9 +57,9 @@ const CircularComponent = () => {
         //     } else {
         //         console.error('Failed to upload profile picture');
         //     }
-        } catch (error) {
-            console.error('Error uploading profile picture:', error);
-        }
+        // } catch (error) {
+        //     console.error('Error uploading profile picture:', error);
+        // }
 
         // Update selected image for preview
         const reader = new FileReader();
